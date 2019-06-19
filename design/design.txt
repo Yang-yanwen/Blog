@@ -1,0 +1,16 @@
+1、标志   logo
+2、分类   sort
+3、作者  author
+4、日期  date
+5、简介  intro
+6、内容  content
+
+
+6、评论  comment --解耦--> 评论绑到固定文章 
+   1、 id 自己的
+   2、 fid 联接文章id
+   3、 content
+   4、date
+   5、author
+
+后台管理：expersss router 路由分发

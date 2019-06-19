@@ -1,0 +1,262 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./js/jquery-2.1.0.js"></script>
+    <link rel="stylesheet" href="./bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <script src="./bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+    <style>
+        .main-wrap {
+            position: relative;
+        }
+
+        .right-wrap {
+            width: 100%;
+            min-height: 500px;
+            position: absolute;
+            display: none;
+        }
+
+        .right-wrap.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="page-header" style="position:relative">
+            <h1>
+                博客后台管理
+                <small>--V 0.1.2</small>
+                <a href="/" title="首页">
+                    <span class="glyphicon glyphicon-home" style="position:absolute;right:0px"></span>
+                </a>
+            </h1>
+        </div>
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="well">
+                <ul class="nav nav-pills nav-stacked">
+                    <li role="presentation" class="list-item  " data-wrap="manageArticle" id="manageArticle-btn">
+                        <a href="#">文章管理</a>
+                    </li>
+                    <li role="presentation" class="list-item active" data-wrap="publish">
+                        <a href="#">发布文章</a>
+                    </li>
+                    <li role="presentation" class="list-item  " data-wrap="examine" id="examine-btn">
+                        <a href="#">审核评论</a>
+                    </li>
+                </ul>
+                </div>
+            </div>
+            <div class="col-lg-9 main-wrap">
+                <!--主页  -->
+                <div class="right-wrap  " id="manageArticle">
+                    
+                </div>
+                <!-- 发布文章 -->
+                <div class="right-wrap active" id="publish">
+                    <form method="POST" action="/admin/uploadPage">
+                        <div class="form-group">
+                            <label for="title">大标题</label>
+                            <input type="text" class="form-control" id="title" name="title" placeholder="大标题">
+                        </div>
+                        <div class="author">
+                            <label for="author">作者</label>
+                            <input type="text" class="form-control" id="author" name="author" placeholder="作者">
+                        </div>
+                        <div class="form-group">
+                            <label for="sort">分类</label>
+                            <input type="text" class="form-control" id="sort" name="sort" placeholder="分类">
+                        </div>
+                        <div class="form-group">
+                            <label for="intro">简介</label>
+                            <input type="text" class="form-control" id="intro" name="intro" placeholder="简介">
+                        </div>
+                        内容：
+                        <textarea class="form-control" name="content" rows="3"></textarea>
+                        <br>
+                        <button type="submit" class="btn btn-default">发布文章</button>
+                    </form>
+                </div>
+                <!-- 审核 -->
+                <div class="right-wrap " id="examine">
+                    当前没有新的评论
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="./js/front-admin.js"></script>
+    <script>
+
+        // 当点击审核评论时 去请求数据
+        var passComment = function (id) {
+
+            $.ajax({
+                type: 'GET',
+                url: 'http://127.0.0.1:4000/admin/passComment', //静态调试时用 全部网址
+                data: {
+                    id: id
+                },
+                success: function (e) {
+                    console.log(e)
+                    getComment()
+                }
+            })
+        }
+        var nopassComment = function (id) {
+
+            $.ajax({
+                type: 'GET',
+                url: 'http://127.0.0.1:4000/admin/nopassComment',
+                data: {
+                    id: id
+                },
+                success: function (e) {
+                    console.log(e)
+                    getComment()
+                }
+            })
+        }
+        
+        //按钮监听
+        var addEventListener = function () {
+
+            $('.btn-1').on('click', function () { //评论通过
+                passComment(
+                    $(this).attr('data-id')
+                )
+            })
+            $('.btn-2').on('click', function () { //评论不通过
+                nopassComment(
+                    $(this).attr('data-id')
+                )
+            })
+            
+        }
+        //渲染评论数据
+        var fillComment = function (arr) {
+            var html = ''
+            if (arr.length == 0) {
+                //console.log(1)
+                $('#examine').html('<div class="well" id="examine">当前没有新的评论</div>')
+                //console.log(2)
+                return
+            }
+            arr.forEach((e) => {
+                html +=
+                    `
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                评论者：${e.author}
+                                <br>
+                                <small>日期：${e.date}</small>
+                            </h3>
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="well">
+                                文章标题：${e.f_title}
+                                <br> 文章简介：${e.f_intro}
+                            </div>
+                            ${e.content}
+                        </div>
+                        <div class="panel-footer">
+                            <div class="btn-group" role="group" aria-label="...">
+                                <button type="button" class="btn btn-default btn-success btn-1" data-id="${e._id}">通过</button>
+                                <button type="button" class="btn btn-default btn-danger btn-2" data-id="${e._id}">不通过</button>
+                            </div>
+                        </div>
+                    </div>
+                `
+            })
+            $('#examine').html(html)
+            addEventListener()
+        }
+        //获取评论数据
+        var getComment = function () {
+            $.ajax({
+                type: 'GET',
+                url: 'http://127.0.0.1:4000/admin/getComment',
+                data: {},
+                success: function (e) {
+                    //console.log(e)
+                    fillComment(e)
+                }
+            })
+        }
+
+        $('#examine-btn').on('click', function () {
+            getComment()
+        })
+
+        //渲染文章列表
+        var fillArticleList = function (arr) {
+            var html = ''
+            if(arr.length==0){
+                $('#manageArticle').html('<div class="well" id="examine">当前没有文章</div>')
+                return
+            }
+            arr.forEach((e) => {
+                html +=
+                `
+                <div class="col-lg-8">
+                        <div class="list-group ">
+                            <a href="/p?id=${e._id}" class="list-group-item active">
+                               《 ${e.title} 》
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-1">
+                      <a href="/admin/deletePage?id=${e._id}">  
+                        <button type="button" class="btn btn-danger btn-del" style="height:41px;width:70px" data-id="${e._id}">删除</button>
+                      </a>  
+                    </div>
+                `
+            })
+            
+            $('#manageArticle').html(html)
+           
+        }
+        //获取文章列表
+        var getArticle = function () {
+            $.ajax({
+                type: 'GET',
+                url: 'http://127.0.0.1:4000/admin/getArticle',
+                data: {},
+                success: function (e) {
+                    //console.log(e)
+                    fillArticleList(e)
+                }
+            })
+        }
+        $('#manageArticle-btn').on('click', function () {
+            getArticle()
+        })
+        // var deleteArticle=function(id){
+        //     $.ajax({
+        //         type: 'GET',
+        //         url: 'http://127.0.0.1:4000/admin/deletePage',
+        //         data: {
+        //             id: id
+        //         },
+        //         success: function (e) {
+        //             getArticle()
+        //         }
+        //     })
+        // }
+        // $('.btn-del').on('click', function() { //删除文章
+        //         deleteArticle(
+        //             $(this).attr('data-id')
+        //         )
+        //         console.log( $(this).attr('data-id'))
+        //     })
+    </script>
+</body>
+
+</html>

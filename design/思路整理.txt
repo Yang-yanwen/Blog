@@ -1,0 +1,30 @@
+前台--提供界面给用户
+      |
+    接口
+      |--<get>--'/' 提供首页
+      |
+      |--<get>--'/p'提供具体文章页面
+      |
+      |--<post>--'/submitComment' 用户提交评论
+      |
+后台--提供界面给管理者
+      |
+    接口
+      |--<get>--'/admmin' 后台管理界面
+      |
+      |--<get>--'/admin/login' 发送登录界面
+      |
+      |--<post>--'/admin/login' 登录处理接口
+      |
+      |--<post>--'/admin/uploadPage' 发布文章
+      |
+      |--<get>--'/admin/getComment' 获取待审核的评论
+      |
+      |--<get>--'/admin/passComment' 修改其state状态为1   通过某一评论
+      |
+      |--<get>--'/admin/nopassComment' 修改其state状态为2 否定通过某一评论
+
+评论审核：提交评论 给评论加状态state[0:审核中,1:审核通过,2:审核不通过] 
+管理员 从评论数据库中find 【0】状态数据 修改其state状态  
+渲染评论 查看状态 为’1‘则渲染 
+   

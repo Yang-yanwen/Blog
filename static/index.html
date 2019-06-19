@@ -1,0 +1,97 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>静态测试</title>
+    <script src="./js/jquery-2.1.0.js"></script>
+    <link rel="stylesheet" href="./bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <style>
+        /* body {
+            background-image: url(./img/background.jpg);
+            background-repeat: no-repeat;
+            
+        } */
+    </style>
+
+    <script src="./bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+</head>
+
+<body id="Body">
+    <div class="container">
+        <div class="page-header" style="position:relative">
+
+            <h1>
+                BlueBlue-Blog
+                <a href="#" id="secret">
+                    <img src="./img/secret.png" style="width:30px;height:30px;position: absolute;right:60px;bottom:0px " title="secret">
+                </a>
+                <a href="#">
+                    <img src="./img/logo.jpg" style="width:50px;height:50px;position: absolute;right:0px;bottom:0px ">
+                </a>
+            </h1>
+
+        </div>
+
+        <ul class="list-group">
+            <li class="list-group-item">
+                <a href="#">
+                    <h3>单身狗</h3>
+                </a>
+                <p>日期：2018-11-27</p>
+                <p>单身狗的日常：宿舍、食堂、教室......</p>
+            </li>
+        </ul>
+    </div>
+
+    <!--secret模态框  -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="secret-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">请输入你的访问权限：</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="password" class="form-control" placeholder="········">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary">进入</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+    <script> 
+        // 获取窗口宽度
+        // if (window.innerWidth)
+        //     winWidth = window.innerWidth;
+        // else if ((document.body) && (document.body.clientWidth))
+        //     winWidth = document.body.clientWidth;
+        // // 获取窗口高度
+        // if (window.innerHeight)
+        //     winHeight = window.innerHeight;
+        // else if ((document.body) && (document.body.clientHeight))
+        //     winHeight = document.body.clientHeight;
+        // // 通过深入 Document 内部对 body 进行检测，获取窗口大小
+        // // if (document.documentElement && document.documentElement.clientHeight && document.documentElement.clientWidth) {
+        // //     winHeight = document.documentElement.clientHeight;
+        // //     winWidth = document.documentElement.clientWidth;
+        // // }
+        // console.log(winHeight,winWidth)
+        // $('#Body').css('background-size','winHeight')
+        
+        $('#secret').on('click',()=>{
+             $('#secret-modal').modal('show')
+        })
+       
+    </script>
+</body>
+
+</html>
